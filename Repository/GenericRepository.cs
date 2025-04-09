@@ -19,9 +19,14 @@ namespace BaseRepository.Repository
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id) 
         {
-            return await _dbSet.FindAsync(id);
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+            {
+                throw new InvalidOperationException($"Entity of type {typeof(T).Name} with ID {id} was not found.");
+            }
+            return entity;
         }
 
         public async Task AddAsync(T entity)
